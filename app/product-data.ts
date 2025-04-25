@@ -17,7 +17,7 @@ export const products : Product [] = [
     {
         id : '124',
         name:'Mug',
-        imageURL:'Mug.jpg',
+        imageURL:'mug.jpg',
         description:'Your morning coffee mug.',
         price: 30
     },
