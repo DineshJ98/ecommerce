@@ -9,7 +9,6 @@ export default function ProductsList({product}:{product: Product[]}){
                 <Link key={product.id} href={'/products/' + product.id}>
                     <Image src={'/' + product.imageURL} alt={product.name} width={150} height={150}/>
                     <h3>{product.name}</h3>
-                    <p>{product.description}</p>
                     <b>{'$'+ product.price}</b>
                 </Link>
             ))}
