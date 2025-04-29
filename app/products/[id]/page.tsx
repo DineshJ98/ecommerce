@@ -1,9 +1,11 @@
 import NotFoundPage from "@/app/not-found";
 import { products } from "@/app/product-data";
 
-export default function ProductsDetailsPage({ params }:{ params : { id : string }}) {
+export default async function ProductsDetailsPage({ params }:{ params : { id : string }}) {
     
-    const product = products.find(p => p.id === params.id);
+    const { id } = await params;
+
+    const product = products.find( p => p.id === id);
 
     if (!product){
         return <NotFoundPage/>
@@ -11,8 +13,8 @@ export default function ProductsDetailsPage({ params }:{ params : { id : string 
 
     return (
     <>
-    <h1>{product.name}</h1>
-    <p>${product.price}</p>
+    <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
+    <p className="text-2xl text-gray-600 mb-6">${product.price}</p>
     <h3>Description</h3>
     <p>{product.description}</p>
     </>
