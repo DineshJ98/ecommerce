@@ -1,0 +1,44 @@
+import { products } from "@/app/product-data"
+import { NextRequest } from "next/server"
+
+
+type ShoppingCart = Record<string,string[]>
+
+
+const carts: ShoppingCart = {
+    '1':['123','345'],
+    '2':['124'],
+    '3':['123','345','999']
+}
+
+type Params = {
+    id: string
+}
+
+export async function GET( request : NextRequest ,{params } : { params : Params}) {
+
+    const userparam = await params;
+
+    const userId = userparam.id;
+
+    const productIds = carts[userId];
+
+    if(productIds === undefined){
+        return new Response(JSON.stringify([]), {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
+    const productsInCart = productIds.map( prodId => products.find( product => product.id === prodId));
+
+    return new Response(JSON.stringify(productsInCart), {
+        status: 200,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    
+}
