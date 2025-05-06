@@ -42,3 +42,47 @@ export async function GET( request : NextRequest ,{params } : { params : Params}
     });
     
 }
+
+type CartBody = {
+    productId : string;
+}
+
+export async function POST( request: NextRequest, {params} : {params : Params}) {
+    
+    const userParam = await params;
+    const userID = userParam.id;
+    const body : CartBody = await request.json();
+
+    const productId = body.productId;
+
+    carts[userID] = carts[userID] ?  carts[userID].concat(productId) : [productId]
+
+    const cartProducts = carts[userID].map( id => products.find(product => product.id === id) )
+
+    return new Response(JSON.stringify(cartProducts), {
+        status: 201,
+        headers: {
+            'Content-Type' : 'application/json',
+        }
+    });
+}
+
+export async function DELETE( request : NextRequest, {params} : {params : Params} ) {
+    
+    const userParam = await params;
+    const userID = userParam.id;
+    const body : CartBody = await request.json();
+    
+    const productID = body.productId;
+
+    carts[userID] = carts[userID] ? carts[userID].filter(p => p !== productID) : [];
+
+    const cartProducts = carts[userID].map( id => products.find(product => product.id === id) )
+
+    return new Response(JSON.stringify(cartProducts), {
+        status: 202,
+        headers: {
+            'Content-Type' : 'application/json',
+        }
+    });
+}
