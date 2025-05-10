@@ -1,3 +1,4 @@
+import { connectToDB } from "@/app/api/db"
 import { products } from "@/app/product-data"
 import { NextRequest } from "next/server"
 
@@ -17,13 +18,15 @@ type Params = {
 
 export async function GET( request : NextRequest ,{params } : { params : Params}) {
 
+    const { db } = await connectToDB();
+
     const userparam = await params;
 
     const userId = userparam.id;
 
-    const productIds = carts[userId];
+    const userCart = await db.collection('carts').findOne({ userId : userId });
 
-    if(productIds === undefined){
+    if(!userCart){
         return new Response(JSON.stringify([]), {
             status: 200,
             headers: {
@@ -32,7 +35,9 @@ export async function GET( request : NextRequest ,{params } : { params : Params}
         });
     }
 
-    const productsInCart = productIds.map( prodId => products.find( product => product.id === prodId));
+
+    const cartIds = userCart.cartIds;
+    const productsInCart = await db.collection('products').find({ id : { $in : cartIds} }).toArray();
 
     return new Response(JSON.stringify(productsInCart), {
         status: 200,
@@ -49,15 +54,20 @@ type CartBody = {
 
 export async function POST( request: NextRequest, {params} : {params : Params}) {
     
+    const { db } = await connectToDB();
     const userParam = await params;
-    const userID = userParam.id;
+    const userId = userParam.id;
     const body : CartBody = await request.json();
 
     const productId = body.productId;
 
-    carts[userID] = carts[userID] ?  carts[userID].concat(productId) : [productId]
+    const updatedCart = await db.collection('carts').findOneAndUpdate(
+        { userId : userId},
+        { $push : { cartIds : productId} },
+        { upsert : true, returnDocument: 'after' },
+    );
 
-    const cartProducts = carts[userID].map( id => products.find(product => product.id === id) )
+    const cartProducts = await db.collection('products').find({id : { $in : updatedCart.cartIds}}).toArray();
 
     return new Response(JSON.stringify(cartProducts), {
         status: 201,
@@ -68,16 +78,21 @@ export async function POST( request: NextRequest, {params} : {params : Params}) 
 }
 
 export async function DELETE( request : NextRequest, {params} : {params : Params} ) {
-    
+
+    const { db } = await connectToDB();
     const userParam = await params;
-    const userID = userParam.id;
+    const userId = userParam.id;
     const body : CartBody = await request.json();
     
     const productID = body.productId;
 
-    carts[userID] = carts[userID] ? carts[userID].filter(p => p !== productID) : [];
+    const updatedCart = await db.collection('carts').findOneAndUpdate(
+        {userId : userId},
+        { $pull : {cartIds : productID}},
+        { upsert : true , returnDocument : "after"},
+    );
 
-    const cartProducts = carts[userID].map( id => products.find(product => product.id === id) )
+    const cartProducts = await db.collection('products').find({ id : { $in : updatedCart.cartIds } }).toArray();
 
     return new Response(JSON.stringify(cartProducts), {
         status: 202,
