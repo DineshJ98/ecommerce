@@ -92,6 +92,16 @@ export async function DELETE( request : NextRequest, {params} : {params : Params
         { upsert : true , returnDocument : "after"},
     );
 
+    if(!updatedCart){
+        return new Response(JSON.stringify([]), {
+            status: 202,
+            headers: {
+                'Content-Type' : 'application/json',
+            }
+
+        })
+    }
+
     const cartProducts = await db.collection('products').find({ id : { $in : updatedCart.cartIds } }).toArray();
 
     return new Response(JSON.stringify(cartProducts), {
