@@ -1,5 +1,5 @@
 export async function GET () {
-    return new Response("Hello this is from NextJs routes!", {
+    return new Response(JSON.stringify({ message : "Hello this is from NextJs routes!"}), {
         status:200,
     });
 }
