@@ -31,7 +31,11 @@ export default function ShoppingCartList( { initialCartProducts } : { initialCar
                 <Link href={ '/products/' + product.id }>
                     <h3 className="text-xl text-black font-semibold mb-2">{product.name}</h3>
                     <p className="text-gray-600">${product.price}</p>
-                    <button
+                    
+                    <div
+                        className="flex justify-end"
+                    >
+                        <button
                         className="bg-blue-500 text-white font-bold px-2 py-2 rounded hover:bg-blue-700"
                         onClick={
                             (e) => {
@@ -40,6 +44,7 @@ export default function ShoppingCartList( { initialCartProducts } : { initialCar
                             }
                         }                       
                     >Remove From Cart</button>
+                    </div>      
                 </Link>
                 </li>
             ))
