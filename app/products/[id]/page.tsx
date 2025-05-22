@@ -1,5 +1,7 @@
 import NotFoundPage from "@/app/not-found";
 
+export const dynamic = 'force-dynemic';
+
 export default async function ProductsDetailsPage({ params }:{ params : { id : string }}) {
     
     const { id } = await params;
