@@ -1,6 +1,6 @@
 import NotFoundPage from "@/app/not-found";
 
-export const dynamic = 'force-dynemic';
+export const dynamic = 'force-dynamic';
 
 export default async function ProductsDetailsPage({ params }:{ params : { id : string }}) {
     
