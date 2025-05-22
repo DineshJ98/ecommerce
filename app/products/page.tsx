@@ -2,9 +2,9 @@ import ProductsList from "../ProductsList";
 
 export default async function ProductsPage() {
 
-    const response = await fetch('http://172.18.73.80:3000/api/products');
+    const response = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/products');
     const products = await response.json();
-    const response2 = await fetch('http://172.18.73.80:3000/api/users/2/cart', {
+    const response2 = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/users/2/cart', {
         cache: 'no-cache',
     });
     const cartProducts = await response2.json();

@@ -7,7 +7,7 @@ export default function ShoppingCartList( { initialCartProducts } : { initialCar
     const [cartProducts, setCartProducts] = useState(initialCartProducts);
 
     async function removeProduct(productId : string){
-        const response = await fetch('http://172.18.73.80:3000/api/users/2/cart', {
+        const response = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/users/2/cart', {
             method: 'DELETE',
             body: JSON.stringify({
                 productId,

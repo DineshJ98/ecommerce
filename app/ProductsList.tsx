@@ -10,7 +10,7 @@ export default function ProductsList({product , initialCartProducts = []}:{produ
 
     async function addToCart(productId : string) {
         
-        const response = await fetch('http://172.18.73.80:3000/api/users/2/cart', {
+        const response = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/users/2/cart', {
             method: 'POST',
             body: JSON.stringify({
                 productId,
@@ -29,7 +29,7 @@ export default function ProductsList({product , initialCartProducts = []}:{produ
     }
 
     async function removeFromCart(productId : string) {
-        const response = await fetch('http://172.18.73.80:3000/api/users/2/cart', {
+        const response = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/users/2/cart', {
             method: 'DELETE',
             body: JSON.stringify({
                 productId,

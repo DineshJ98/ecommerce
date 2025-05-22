@@ -3,7 +3,7 @@ import NotFoundPage from "@/app/not-found";
 export default async function ProductsDetailsPage({ params }:{ params : { id : string }}) {
     
     const { id } = await params;
-    const response = await fetch('http://172.18.73.80:3000/api/products/' + id ); 
+    const response = await fetch(process.env.NEXT_PUBLIC_SITE_URL + '/api/products/' + id ); 
     const product = await response.json();
 
     if (!product){
